@@ -6,26 +6,36 @@ import Brick
 import Control.Lens
 import Graphics.Vty
 
-data Calendar = Calendar
-    { _days :: [Day]
-    , _hours :: [Hour]
-    }
+data Calendar = Calendar { _months :: [Month] } deriving (Show)
 
-data Day = Day Int
-data Hour = Hour Int
+data Month = Month { _month :: Febuary }--January | Febuary | March | April | May | June | July | August | September | October | November | December 
+    deriving (Show)
+
+data Febuary = Febuary { _days :: [Day] } deriving (Show)
+
+data Day = Day { _hours :: [Hour] } deriving (Show)
+-- TODO: days will have dates
+
+data Hour = One deriving (Show) 
+-- TODO: hours will have name fields
+-- TODO: hours will have events/schedules
 
 makeLenses ''Calendar
+makeLenses ''Month
+makeLenses ''Febuary
+makeLenses ''Day
 
-calendar :: Calendar
-calendar = Calendar { _days = [Day 10]
-                    , _hours = [Hour 10]
-                    }
+c1 :: Calendar
+c1 = Calendar { _months = [Month (Febuary { _days = [Day {_hours = [One]}]})] }
 
-ui :: Widget a
-ui = str "Hello, world!" <=> str "My name is Chris..."
+ui :: Calendar -> Widget a
+ui c = undefined
+    --let m = c ^. months
+  --in str $ (head ((head m) ^. month days)) ^. hours ._1 -- <=> 
+       --str $ m ^. 
 
 drawUI :: Calendar -> [Widget a]
-drawUI c = [ui]
+drawUI c = return $ ui c
 
 type A = ()
 type B = ()
@@ -46,5 +56,5 @@ app = App { appDraw = drawUI
           }
 
 main :: IO Calendar
-main = defaultMain app calendar
+main = defaultMain app c1
 
