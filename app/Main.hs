@@ -59,22 +59,24 @@ c1 = Calendar
         ] 
     }
 
-getMonths :: Traversal' Calendar Month
-getMonths = months . traversed
+allMonths :: Traversal' Calendar Month
+allMonths = months . traversed
 
 datesOfMonth :: Traversal' Month Int 
 datesOfMonth = days . traversed . date
 
 datesUI :: [Int] -> Widget a
-datesUI dates = vBox $ fmap ((padRight (Pad 2)) . str . show) dates
+datesUI dates = hBox $ fmap ((padRight (Pad 2)) . str . show) dates
+
+monthNames :: Traversal' [Month] String
+monthNames = traversed . name
 
 ui :: Calendar -> Widget a
 ui c = do
-    str monthName <=> datesUI dates
+    str (month ^. monthNames) <=> datesUI dates
         where
-            month = c ^.. getMonths
+            month = c ^.. allMonths
             dates = (head month) ^.. datesOfMonth
-            monthName = (head month) ^. name
 
 drawUI :: Calendar -> [Widget a]
 drawUI c = return $ ui c
