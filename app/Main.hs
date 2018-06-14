@@ -8,12 +8,15 @@ import Graphics.Vty
 
 data Calendar = Calendar { _months :: [Month] } deriving (Show)
 
-data Month = Month { _month :: Febuary }--January | Febuary | March | April | May | June | July | August | September | October | November | December 
-    deriving (Show)
+data Month = Month 
+    { _name :: String
+    , _days :: [Day]
+    } deriving (Show)
 
-data Febuary = Febuary { _days :: [Day] } deriving (Show)
-
-data Day = Day { _hours :: [Hour] } deriving (Show)
+data Day = Day 
+    { _hours :: [Hour]
+    , _date :: Int
+    } deriving (Show)
 -- TODO: days will have dates
 
 data Hour = One deriving (Show) 
@@ -22,17 +25,56 @@ data Hour = One deriving (Show)
 
 makeLenses ''Calendar
 makeLenses ''Month
-makeLenses ''Febuary
 makeLenses ''Day
 
 c1 :: Calendar
-c1 = Calendar { _months = [Month (Febuary { _days = [Day {_hours = [One]}]})] }
+c1 = Calendar 
+    { _months = 
+        [ Month 
+            { _name = "Febuary"
+            , _days = 
+                [ Day 
+                    { _hours = [One]
+                    , _date = 1
+                    }
+                , Day 
+                    { _hours = [One]
+                    , _date = 2
+                    }
+                ]
+            }
+        , Month 
+            { _name = "June"
+            , _days = 
+                [ Day 
+                    { _hours = [One]
+                    , _date = 1
+                    }
+                , Day 
+                    { _hours = [One]
+                    , _date = 2
+                    }
+                ]
+            }
+        ] 
+    }
+
+getMonths :: Traversal' Calendar Month
+getMonths = months . traversed
+
+datesOfMonth :: Traversal' Month Int 
+datesOfMonth = days . traversed . date
+
+datesUI :: [Int] -> Widget a
+datesUI dates = hBox (fmap (padRight (Pad 5)) (fmap str (fmap show dates)))
 
 ui :: Calendar -> Widget a
-ui c = undefined
-    --let m = c ^. months
-  --in str $ (head ((head m) ^. month days)) ^. hours ._1 -- <=> 
-       --str $ m ^. 
+ui c = do
+    str monthName <=> datesUI dates
+        where
+            month = c ^.. getMonths
+            dates = (head month) ^.. datesOfMonth
+            monthName = (head month) ^. name
 
 drawUI :: Calendar -> [Widget a]
 drawUI c = return $ ui c
