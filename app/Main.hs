@@ -66,7 +66,7 @@ datesOfMonth :: Traversal' Month Int
 datesOfMonth = days . traversed . date
 
 datesUI :: [Int] -> Widget a
-datesUI dates = hBox (fmap (padRight (Pad 5)) (fmap str (fmap show dates)))
+datesUI dates = vBox $ fmap ((padRight (Pad 2)) . str . show) dates
 
 ui :: Calendar -> Widget a
 ui c = do
