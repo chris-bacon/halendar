@@ -69,8 +69,14 @@ c1 = Calendar
 --datesOfMonth :: Traversal' Month Int 
 --datesOfMonth = days . traversed . date
 
+dateToWidget :: String -> Widget a
+dateToWidget d = 
+    if length d == 1 
+       then ((padRight (Pad 3)) . str $ d)
+       else ((padRight (Pad 2)) . str $ d)
+
 datesUI :: [[Int]] -> Widget a 
-datesUI dates = vBox $ widgetsToLines $ ((<$>) . (<$>)) ((padRight (Pad 2)) . str . show) dates
+datesUI dates = vBox $ widgetsToLines $ ((<$>) . (<$>)) (dateToWidget . show) dates
 
 widgetsToLines :: [[Widget a]] -> [Widget a]
 widgetsToLines w = foldr (<+>) emptyWidget <$> w
