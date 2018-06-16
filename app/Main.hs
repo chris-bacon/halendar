@@ -60,8 +60,7 @@ ui c = do
     str "June" <=> datesUI (splitAtAll 7 [1..(MonthDay.monthLength False (_month c))])
 
 drawUI :: Calendar -> [Widget a]
-drawUI c = do
-    return $ ui c
+drawUI c = return $ ui c
 
 type A = ()
 type B = ()
