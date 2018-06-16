@@ -7,7 +7,11 @@ import qualified Data.Time as Time
 import qualified Data.Time.Calendar.MonthDay as MonthDay
 import Graphics.Vty
 
-data Calendar = Calendar { _currentYear :: Integer, _currentMonth :: Int, _currentDay :: Int } deriving (Show)
+data Calendar = Calendar 
+    { _currentYear :: Integer
+    , _currentMonth :: Int
+    , _currentDay :: Int 
+    } deriving (Show)
 
 --data Month = Month 
 --    { _name :: String
