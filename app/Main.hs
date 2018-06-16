@@ -7,20 +7,20 @@ import qualified Data.Time as Time
 import qualified Data.Time.Calendar.MonthDay as MonthDay
 import Graphics.Vty
 
-data Calendar = Calendar { _months :: [Month] } deriving (Show)
+data Calendar = Calendar { _month :: Int } deriving (Show)
 
-data Month = Month 
-    { _name :: String
-    , _days :: [Day]
-    } deriving (Show)
+--data Month = Month 
+--    { _name :: String
+--    , _days :: [Day]
+--    } deriving (Show)
 
-data Day = Day 
-    { _hours :: [Hour]
-    , _date :: Int
-    } deriving (Show)
+--data Day = Day 
+--    { _hours :: [Hour]
+--    , _date :: Int
+--    } deriving (Show)
 -- TODO: days will have dates
 
-data Hour = One deriving (Show) 
+--data Hour = One deriving (Show) 
 -- TODO: hours will have name fields
 -- TODO: hours will have events/schedules
 
@@ -28,46 +28,17 @@ data Hour = One deriving (Show)
 --makeLenses ''Month
 --makeLenses ''Day
 
-getToday :: IO (Integer, Int, Int)
-getToday = Time.getCurrentTime >>= return . Time.toGregorian . Time.utctDay
-
-c1 :: Calendar
-c1 = Calendar 
-    { _months = 
-        [ Month 
-            { _name = "Febuary"
-            , _days = 
-                [ Day 
-                    { _hours = [One]
-                    , _date = 1
-                    }
-                , Day 
-                    { _hours = [One]
-                    , _date = 2
-                    }
-                ]
-            }
-        , Month 
-            { _name = "June"
-            , _days = 
-                [ Day 
-                    { _hours = [One]
-                    , _date = 1
-                    }
-                , Day 
-                    { _hours = [One]
-                    , _date = 2
-                    }
-                ]
-            }
-        ] 
-    }
-
 --allMonths :: Traversal' Calendar Month
 --allMonths = months . traversed
 
 --datesOfMonth :: Traversal' Month Int 
 --datesOfMonth = days . traversed . date
+
+--monthNames :: Traversal' [Month] String
+--monthNames = traversed . name
+
+getToday :: IO (Integer, Int, Int)
+getToday = Time.getCurrentTime >>= return . Time.toGregorian . Time.utctDay
 
 dateToWidget :: String -> Widget a
 dateToWidget d
@@ -80,19 +51,17 @@ datesUI dates = vBox $ widgetsToLines $ ((<$>) . (<$>)) (dateToWidget . show) da
 widgetsToLines :: [[Widget a]] -> [Widget a]
 widgetsToLines w = foldr (<+>) emptyWidget <$> w
 
---monthNames :: Traversal' [Month] String
---monthNames = traversed . name
-
 splitAtAll :: Int -> [Int] -> [[Int]]
 splitAtAll _ [] = []
 splitAtAll c xs = [(fst $ splitAt c xs)] ++ splitAtAll c (drop c xs)
 
 ui :: Calendar -> Widget a
 ui c = do
-    str "June" <=> datesUI (splitAtAll 7 [1..(MonthDay.monthLength False 6)])
+    str "June" <=> datesUI (splitAtAll 7 [1..(MonthDay.monthLength False (_month c))])
 
 drawUI :: Calendar -> [Widget a]
-drawUI c = return $ ui c
+drawUI c = do
+    return $ ui c
 
 type A = ()
 type B = ()
@@ -113,5 +82,8 @@ app = App { appDraw = drawUI
           }
 
 main :: IO Calendar
-main = defaultMain app c1
+main = do
+    (_, month, _) <- getToday
+    let calendar = Calendar { _month = month }
+    defaultMain app calendar
 
