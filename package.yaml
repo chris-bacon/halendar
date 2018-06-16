@@ -38,6 +38,7 @@ executables:
     - brick
     - lens
     - vty
+    - time
 
 tests:
   halendar-test:
