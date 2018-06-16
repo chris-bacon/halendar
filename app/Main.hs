@@ -70,10 +70,9 @@ c1 = Calendar
 --datesOfMonth = days . traversed . date
 
 dateToWidget :: String -> Widget a
-dateToWidget d = 
-    if length d == 1 
-       then ((padRight (Pad 3)) . str $ d)
-       else ((padRight (Pad 2)) . str $ d)
+dateToWidget d
+    | length d == 1 = (padRight (Pad 3)) . str $ d
+    | otherwise = (padRight (Pad 2)) . str $ d
 
 datesUI :: [[Int]] -> Widget a 
 datesUI dates = vBox $ widgetsToLines $ ((<$>) . (<$>)) (dateToWidget . show) dates
@@ -91,9 +90,6 @@ splitAtAll c xs = [(fst $ splitAt c xs)] ++ splitAtAll c (drop c xs)
 ui :: Calendar -> Widget a
 ui c = do
     str "June" <=> datesUI (splitAtAll 7 [1..(MonthDay.monthLength False 6)])
---        where
---            month = c ^.. allMonths
---            dates = (head month) ^.. datesOfMonth
 
 drawUI :: Calendar -> [Widget a]
 drawUI c = return $ ui c
