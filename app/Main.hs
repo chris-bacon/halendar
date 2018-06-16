@@ -7,7 +7,7 @@ import qualified Data.Time as Time
 import qualified Data.Time.Calendar.MonthDay as MonthDay
 import Graphics.Vty
 
-data Calendar = Calendar { _month :: Int } deriving (Show)
+data Calendar = Calendar { _year :: Integer, _month :: Int, _day :: Int } deriving (Show)
 
 --data Month = Month 
 --    { _name :: String
@@ -55,9 +55,12 @@ splitAtAll :: Int -> [Int] -> [[Int]]
 splitAtAll _ [] = []
 splitAtAll c xs = [(fst $ splitAt c xs)] ++ splitAtAll c (drop c xs)
 
+getDaysInMonth :: Calendar -> [Int]
+getDaysInMonth c = [1..(MonthDay.monthLength (Time.isLeapYear $ _year c) (_month c))]
+
 ui :: Calendar -> Widget a
 ui c = do
-    str "June" <=> datesUI (splitAtAll 7 [1..(MonthDay.monthLength False (_month c))])
+    str "June" <=> datesUI (splitAtAll 7 (getDaysInMonth c))
 
 drawUI :: Calendar -> [Widget a]
 drawUI c = return $ ui c
@@ -82,7 +85,7 @@ app = App { appDraw = drawUI
 
 main :: IO Calendar
 main = do
-    (_, month, _) <- getToday
-    let calendar = Calendar { _month = month }
+    (year, month, day) <- getToday
+    let calendar = Calendar { _year = year, _month = month, _day = day }
     defaultMain app calendar
 
