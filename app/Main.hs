@@ -47,6 +47,7 @@ getToday = Time.getCurrentTime >>= return . Time.toGregorian . Time.utctDay
 padRightWithSpaces :: Int -> Widget a -> Widget a
 padRightWithSpaces n = (padRight (Pad n))
 
+-- TODO: Refactor this mess of code
 dateToWidget :: Calendar -> String -> Widget a
 dateToWidget c d
   | length d == 1 && (read d :: Int) == _currentDay c = styleToday . (padRightWithSpaces 3) . str $ d
