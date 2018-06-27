@@ -44,13 +44,21 @@ data Calendar = Calendar
 getToday :: IO (Integer, Int, Int)
 getToday = Time.getCurrentTime >>= return . Time.toGregorian . Time.utctDay
 
-dateToWidget :: String -> Widget a
-dateToWidget d
-    | length d == 1 = (padRight (Pad 3)) . str $ d
-    | otherwise = (padRight (Pad 2)) . str $ d
+padRightWithSpaces :: Int -> Widget a -> Widget a
+padRightWithSpaces n = (padRight (Pad n))
 
-datesUI :: [[Int]] -> Widget a 
-datesUI dates = vBox $ widgetsToLines $ ((<$>) . (<$>)) (dateToWidget . show) dates
+dateToWidget :: Calendar -> String -> Widget a
+dateToWidget c d
+  | length d == 1 && (read d :: Int) == _currentDay c = styleToday . (padRightWithSpaces 3) . str $ d
+  | length d == 1 = (padRightWithSpaces 3) . str $ d
+  | length d == 2 && (read d :: Int) == _currentDay c = styleToday . (padRightWithSpaces 2) . str $ d
+  | otherwise = (padRightWithSpaces 2) . str $ d
+
+styleToday :: Widget a -> Widget a
+styleToday = withAttr (attrName "whitebg")
+
+datesUI :: Calendar -> [[Int]] -> Widget a 
+datesUI c dates = vBox $ widgetsToLines $ ((<$>) . (<$>)) ((dateToWidget c) . show) dates
 
 widgetsToLines :: [[Widget a]] -> [Widget a]
 widgetsToLines w = foldr (<+>) emptyWidget <$> w
@@ -63,8 +71,9 @@ getDaysInMonth :: Calendar -> [Int]
 getDaysInMonth c = [1..(MonthDay.monthLength (Time.isLeapYear $ _currentYear c) (_currentMonth c))]
 
 ui :: Calendar -> Widget a
-ui c = do
-    str "June" <=> datesUI (splitAtAll 7 (getDaysInMonth c))
+ui c = do  
+    str "June" 
+    <=> datesUI c (splitAtAll 7 (getDaysInMonth c))
 
 drawUI :: Calendar -> [Widget a]
 drawUI c = return $ ui c
@@ -78,7 +87,7 @@ handleEvent c (VtyEvent (EvKey (KChar 'q') [])) = halt c
 handleEvent c _ = continue c
 
 attributeMap :: AttrMap
-attributeMap = attrMap defAttr [("bg", red `on` red)]
+attributeMap = attrMap defAttr [("whitebg", bg white)]
 
 app :: App Calendar A B
 app = App { appDraw = drawUI
