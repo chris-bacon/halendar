@@ -4,6 +4,13 @@
 
 An interactive command line calendar.
 
+## Commands
+
+```
+ESC - quit
+q   - quit
+```
+
 ## TODO
 
 - Lots of things.
