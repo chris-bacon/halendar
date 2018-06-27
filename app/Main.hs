@@ -4,6 +4,7 @@ module Main where
 import Brick
 import Control.Lens
 import qualified Data.Time as Time
+import Graphics.Vty
 
 import Calendar
 import UI
@@ -11,6 +12,9 @@ import Events
 
 getToday :: IO (Integer, Int, Int)
 getToday = Time.getCurrentTime >>= return . Time.toGregorian . Time.utctDay
+
+attributeMap :: AttrMap
+attributeMap = attrMap defAttr [("white-bg", bg white)]
 
 type A = ()
 type B = ()

@@ -23,10 +23,7 @@ dateToWidget c d
   | otherwise = (padRightWithSpaces 2) . str $ d
 
 styleToday :: Widget a -> Widget a
-styleToday = withAttr (attrName "whitebg")
-
-attributeMap :: AttrMap
-attributeMap = attrMap defAttr [("whitebg", bg white)]
+styleToday = withAttr (attrName "white-bg")
 
 widgetsToLines :: [[Widget a]] -> [Widget a]
 widgetsToLines w = foldr (<+>) emptyWidget <$> w
@@ -45,3 +42,4 @@ ui c = do
 
 drawUI :: Calendar -> [Widget a]
 drawUI c = return $ ui c
+
