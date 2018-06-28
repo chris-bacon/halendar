@@ -23,7 +23,7 @@ dateToWidget c d
   | otherwise = (padRightWithSpaces 2) . str $ d
 
 styleToday :: Widget a -> Widget a
-styleToday = withAttr (attrName "white-bg")
+styleToday = withAttr (attrName "currentDay")
 
 widgetsToLines :: [[Widget a]] -> [Widget a]
 widgetsToLines w = foldr (<+>) emptyWidget <$> w
