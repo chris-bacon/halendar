@@ -14,7 +14,7 @@ getToday :: IO (Integer, Int, Int)
 getToday = Time.getCurrentTime >>= return . Time.toGregorian . Time.utctDay
 
 attributeMap :: AttrMap
-attributeMap = attrMap defAttr [("white-bg", bg white)]
+attributeMap = attrMap defAttr [("currentDay", (black `on` white))]
 
 type A = ()
 type B = ()
