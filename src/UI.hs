@@ -17,9 +17,9 @@ padRightWithSpaces n = (padRight (Pad n))
 -- TODO: Refactor this mess of code
 dateToWidget :: Calendar -> String -> Widget a
 dateToWidget c d
-  | length d == 1 && (read d :: Int) == _currentDay c = styleToday . (padRightWithSpaces 3) . str $ d
+  | length d == 1 && (read d :: Int) == _currentDay c = (padRightWithSpaces 3) . styleToday . str $ d
   | length d == 1 = (padRightWithSpaces 3) . str $ d
-  | length d == 2 && (read d :: Int) == _currentDay c = styleToday . (padRightWithSpaces 2) . str $ d
+  | length d == 2 && (read d :: Int) == _currentDay c = (padRightWithSpaces 2) . styleToday . str $ d
   | otherwise = (padRightWithSpaces 2) . str $ d
 
 styleToday :: Widget a -> Widget a
