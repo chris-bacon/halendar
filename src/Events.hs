@@ -7,6 +7,7 @@ import Calendar
 
 -- TODO: Refactor to use lenses!
 -- TODO: Remove magic numbers!
+-- TODO: Handle ends and beginning of month
 handleEvent :: Calendar -> BrickEvent a b -> EventM c (Next Calendar)
 handleEvent c (VtyEvent (EvKey KEsc [])) = halt c
 handleEvent c (VtyEvent (EvKey (KChar 'q') [])) = halt c

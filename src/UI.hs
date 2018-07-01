@@ -3,10 +3,14 @@ module UI where
 import Brick
 import qualified Data.Time as Time
 import qualified Data.Time.Calendar.MonthDay as MonthDay
-import Data.Monoid ((<>))
+import Data.Monoid 
 import Graphics.Vty
 
 import Calendar
+
+instance Monoid (Widget a) where
+    mempty = emptyWidget
+    mappend a b = a <+> b
 
 getDaysInMonth :: Calendar -> [Int]
 getDaysInMonth c = [1..(MonthDay.monthLength (Time.isLeapYear $ currentYear c) (currentMonth c))]
@@ -23,10 +27,10 @@ dateToWidget c d
   | otherwise = (padRightWithSpaces 2) . str $ d
 
 styleToday :: Widget a -> Widget a
-styleToday = withAttr (attrName "currentDay")
+styleToday = withAttr (attrName "focusedDay")
 
 widgetsToLines :: [[Widget a]] -> [Widget a]
-widgetsToLines w = foldr (<+>) emptyWidget <$> w
+widgetsToLines w = foldr (<>) mempty <$> w
 
 splitAtAll :: Int -> [Int] -> [[Int]]
 splitAtAll _ [] = []
