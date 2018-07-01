@@ -15,6 +15,7 @@ handleEvent c (VtyEvent (EvKey (KChar 'w') [])) = continue Calendar { currentYea
 handleEvent c (VtyEvent (EvKey (KChar 'a') [])) = continue Calendar { currentYear = currentYear c , currentMonth = currentMonth c , currentDay = currentDay c , focusedDay = focusedDay c - 1 }
 handleEvent c (VtyEvent (EvKey (KChar 's') [])) = continue Calendar { currentYear = currentYear c , currentMonth = currentMonth c , currentDay = currentDay c , focusedDay = focusedDay c + 7 }
 handleEvent c (VtyEvent (EvKey (KChar 'd') [])) = continue Calendar { currentYear = currentYear c , currentMonth = currentMonth c , currentDay = currentDay c , focusedDay = focusedDay c + 1 }
+handleEvent c (VtyEvent (EvKey (KChar 'r') [])) = continue Calendar { currentYear = currentYear c , currentMonth = currentMonth c , currentDay = currentDay c , focusedDay = currentDay c }
 handleEvent c (VtyEvent (EvKey KEnter [])) = continue Calendar { currentYear = currentYear c , currentMonth = currentMonth c , currentDay = currentDay c , focusedDay = focusedDay c }
 handleEvent c _ = continue c
 
