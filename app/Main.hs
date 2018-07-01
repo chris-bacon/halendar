@@ -2,7 +2,6 @@
 module Main where
 
 import Brick
-import Control.Lens
 import qualified Data.Time as Time
 import Graphics.Vty
 
@@ -30,6 +29,11 @@ app = App { appDraw = drawUI
 main :: IO Calendar
 main = do
     (year, month, day) <- getToday
-    let calendar = Calendar { _currentYear = year, _currentMonth = month, _currentDay = day }
+    let calendar = Calendar { 
+        currentYear = year
+        , currentMonth = month
+        , currentDay = day
+        , focusedDay = day
+        }
     defaultMain app calendar
 

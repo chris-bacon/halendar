@@ -1,5 +1,3 @@
-{-# LANGUAGE DeriveGeneric #-}
-
 module Calendar where
 
 data Calendar = Calendar 
@@ -7,4 +5,5 @@ data Calendar = Calendar
     , currentMonth :: Int
     , currentDay :: Int
     , focusedDay :: Int
-    } deriving (Show, Generic)
+    } deriving (Show)
+

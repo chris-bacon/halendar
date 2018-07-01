@@ -9,7 +9,7 @@ import Graphics.Vty
 import Calendar
 
 getDaysInMonth :: Calendar -> [Int]
-getDaysInMonth c = [1..(MonthDay.monthLength (Time.isLeapYear $ _currentYear c) (_currentMonth c))]
+getDaysInMonth c = [1..(MonthDay.monthLength (Time.isLeapYear $ currentYear c) (currentMonth c))]
 
 padRightWithSpaces :: Int -> Widget a -> Widget a
 padRightWithSpaces n = (padRight (Pad n))
@@ -17,9 +17,9 @@ padRightWithSpaces n = (padRight (Pad n))
 -- TODO: Refactor this mess of code
 dateToWidget :: Calendar -> String -> Widget a
 dateToWidget c d
-  | length d == 1 && (read d :: Int) == _currentDay c = (padRightWithSpaces 3) . styleToday . str $ d
+  | length d == 1 && (read d :: Int) == focusedDay c = (padRightWithSpaces 3) . styleToday . str $ d
   | length d == 1 = (padRightWithSpaces 3) . str $ d
-  | length d == 2 && (read d :: Int) == _currentDay c = (padRightWithSpaces 2) . styleToday . str $ d
+  | length d == 2 && (read d :: Int) == focusedDay c = (padRightWithSpaces 2) . styleToday . str $ d
   | otherwise = (padRightWithSpaces 2) . str $ d
 
 styleToday :: Widget a -> Widget a

@@ -39,6 +39,8 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     - -O2
+    - -Wall
+    - -Werror
     dependencies:
     - halendar
     - brick
