@@ -29,15 +29,15 @@ dateToWidget c d
 styleToday :: Widget a -> Widget a
 styleToday = withAttr (attrName "focusedDay")
 
-widgetsToLines :: [[Widget a]] -> [Widget a]
-widgetsToLines w = foldr (<>) mempty <$> w
+widgetsToRows :: [[Widget a]] -> [Widget a]
+widgetsToRows w = foldr (<>) mempty <$> w
 
 splitAtAll :: Int -> [Int] -> [[Int]]
 splitAtAll _ [] = []
 splitAtAll c xs = [(fst $ splitAt c xs)] ++ splitAtAll c (drop c xs)
 
 datesUI :: Calendar -> [[Int]] -> Widget a 
-datesUI c dates = vBox $ widgetsToLines $ ((<$>) . (<$>)) ((dateToWidget c) . show) dates
+datesUI c dates = vBox $ widgetsToRows $ ((<$>) . (<$>)) ((dateToWidget c) . show) dates
 
 ui :: Calendar -> Widget a
 ui c = do  
