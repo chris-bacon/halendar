@@ -16,7 +16,7 @@ getDaysInMonth :: Calendar -> [Int]
 getDaysInMonth c = [1..(MonthDay.monthLength (Time.isLeapYear $ currentYear c) (currentMonth c))]
 
 padRightWithSpaces :: Int -> Widget a -> Widget a
-padRightWithSpaces n = (padRight (Pad n))
+padRightWithSpaces n = padRight (Pad n)
 
 -- TODO: Refactor this mess of code
 dateToWidget :: Calendar -> String -> Widget a
@@ -25,6 +25,9 @@ dateToWidget c d
   | length d == 1 = (padRightWithSpaces 3) . str $ d
   | length d == 2 && (read d :: Int) == focusedDay c = (padRightWithSpaces 2) . styleToday . str $ d
   | otherwise = (padRightWithSpaces 2) . str $ d
+
+hourToWidget :: Int -> Widget a
+hourToWidget n = padBottom (Pad 1) $ str $ show n
 
 styleToday :: Widget a -> Widget a
 styleToday = withAttr (attrName "focusedDay")
@@ -39,7 +42,11 @@ splitAtAll c xs = [(fst $ splitAt c xs)] ++ splitAtAll c (drop c xs)
 datesUI :: Calendar -> [[Int]] -> Widget a 
 datesUI c dates = vBox $ widgetsToRows $ ((<$>) . (<$>)) ((dateToWidget c) . show) dates
 
+dayUI :: Widget a
+dayUI = vBox $ fmap hourToWidget [1..24]
+
 ui :: Calendar -> Widget a
+ui (Calendar True _ _ _ _) = dayUI 
 ui c = do  
     str "June" 
     <=> datesUI c (splitAtAll 7 (getDaysInMonth c))

@@ -1,7 +1,8 @@
 module Calendar where
 
 data Calendar = Calendar 
-    { currentYear :: Integer
+    { dayView :: Bool
+    , currentYear :: Integer
     , currentMonth :: Int
     , currentDay :: Int
     , focusedDay :: Int

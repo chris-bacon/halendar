@@ -29,8 +29,9 @@ app = App { appDraw = drawUI
 main :: IO Calendar
 main = do
     (year, month, day) <- getToday
-    let calendar = Calendar { 
-        currentYear = year
+    let calendar = Calendar {
+        dayView = False
+        , currentYear = year
         , currentMonth = month
         , currentDay = day
         , focusedDay = day
