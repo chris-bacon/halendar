@@ -28,7 +28,7 @@ library:
     - brick
     - vty
     - time
-    - generic-lens
+    - lens
 
 executables:
   halendar:
