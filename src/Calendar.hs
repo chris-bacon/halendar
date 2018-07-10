@@ -5,11 +5,11 @@ import Control.Lens.TH
 
 data Calendar = Calendar 
     { _dayView :: Bool
-    , currentYear :: Integer
-    , currentMonth :: Int
-    , currentDay :: Int
+    , _currentYear :: Integer
+    , _currentMonth :: Int
+    , _currentDay :: Int
     , _focusedDay :: Int
-    , day :: Day
+    , _day :: Day
     } deriving (Show)
 
 data Event = Event Int

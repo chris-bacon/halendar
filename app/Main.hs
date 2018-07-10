@@ -31,11 +31,11 @@ main = do
     (year, month, date) <- getToday
     let calendar = Calendar {
         _dayView = False
-        , currentYear = year
-        , currentMonth = month
-        , currentDay = date
+        , _currentYear = year
+        , _currentMonth = month
+        , _currentDay = date
         , _focusedDay = date
-        , day = Day 5
+        , _day = Day 5
         }
     defaultMain app calendar
 

@@ -16,7 +16,7 @@ handleEvent c (VtyEvent (EvKey (KChar 'w') [])) = continue $ c & focusedDay -~ 7
 handleEvent c (VtyEvent (EvKey (KChar 'a') [])) = continue $ c & focusedDay -~ 1
 handleEvent c (VtyEvent (EvKey (KChar 's') [])) = continue $ c & focusedDay +~ 7
 handleEvent c (VtyEvent (EvKey (KChar 'd') [])) = continue $ c & focusedDay +~ 1
-handleEvent c (VtyEvent (EvKey (KChar 'r') [])) = continue $ c & focusedDay .~ currentDay c
+handleEvent c (VtyEvent (EvKey (KChar 'r') [])) = continue $ c & focusedDay .~ c ^. currentDay
 handleEvent c (VtyEvent (EvKey KEnter [])) = continue $ c & dayView .~ True
 handleEvent c _ = continue c
 

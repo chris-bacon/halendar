@@ -1,6 +1,7 @@
 module UI where
 
 import Brick
+import Control.Lens
 import qualified Data.Time as Time
 import qualified Data.Time.Calendar.MonthDay as MonthDay
 import Data.Monoid 
@@ -13,7 +14,7 @@ instance Monoid (Widget a) where
     mappend a b = a <+> b
 
 getDaysInMonth :: Calendar -> [Int]
-getDaysInMonth c = [1..(MonthDay.monthLength (Time.isLeapYear $ currentYear c) (currentMonth c))]
+getDaysInMonth c = [1..(MonthDay.monthLength (Time.isLeapYear $ c ^. currentYear) (c ^. currentMonth))]
 
 padRightWithSpaces :: Int -> Widget a -> Widget a
 padRightWithSpaces n = padRight (Pad n)
@@ -21,14 +22,14 @@ padRightWithSpaces n = padRight (Pad n)
 -- TODO: Refactor this mess of code
 dateToWidget :: Calendar -> String -> Widget a
 dateToWidget c d
-  | length d == 1 && (read d :: Int) == _focusedDay c = (padRightWithSpaces 3) . styleToday . str $ d
+  | length d == 1 && (read d :: Int) == c ^. focusedDay = (padRightWithSpaces 3) . styleToday . str $ d
   | length d == 1 = (padRightWithSpaces 3) . str $ d
-  | length d == 2 && (read d :: Int) == _focusedDay c = (padRightWithSpaces 2) . styleToday . str $ d
+  | length d == 2 && (read d :: Int) == c ^. focusedDay = (padRightWithSpaces 2) . styleToday . str $ d
   | otherwise = (padRightWithSpaces 2) . str $ d
 
 hourToWidget :: Calendar -> Int -> Widget a
 hourToWidget c n
-  | focusedHour (day c) == n = styleToday . padBottom (Pad 1) $ str $ show n
+  | focusedHour (c ^. day) == n = styleToday . padBottom (Pad 1) $ str $ show n
   | otherwise = padBottom (Pad 1) $ str $ show n
 
 styleToday :: Widget a -> Widget a
