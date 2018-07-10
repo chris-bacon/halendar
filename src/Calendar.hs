@@ -4,16 +4,19 @@ module Calendar where
 import Control.Lens.TH
 
 data Calendar = Calendar 
-    { dayView :: Bool
+    { _dayView :: Bool
     , currentYear :: Integer
     , currentMonth :: Int
     , currentDay :: Int
-    , focusedDay :: Int
+    , _focusedDay :: Int
+    , day :: Day
     } deriving (Show)
 
 data Event = Event Int
 
-data Day = Day Int
+data Day = Day 
+    { focusedHour :: Int 
+    } deriving (Show)
 
 makeLenses ''Calendar
 

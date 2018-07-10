@@ -28,13 +28,14 @@ app = App { appDraw = drawUI
 
 main :: IO Calendar
 main = do
-    (year, month, day) <- getToday
+    (year, month, date) <- getToday
     let calendar = Calendar {
-        dayView = False
+        _dayView = False
         , currentYear = year
         , currentMonth = month
-        , currentDay = day
-        , focusedDay = day
+        , currentDay = date
+        , _focusedDay = date
+        , day = Day 5
         }
     defaultMain app calendar
 
