@@ -15,8 +15,9 @@ data Calendar = Calendar
 data Event = Event Int
 
 data Day = Day 
-    { focusedHour :: Int 
+    { _focusedHour :: Int 
     } deriving (Show)
 
 makeLenses ''Calendar
+makeLenses ''Day
 

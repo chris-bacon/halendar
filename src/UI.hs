@@ -29,7 +29,7 @@ dateToWidget c d
 
 hourToWidget :: Calendar -> Int -> Widget a
 hourToWidget c n
-  | focusedHour (c ^. day) == n = styleToday . padBottom (Pad 1) $ str $ show n
+  | c ^. day ^. focusedHour == n = styleToday . padBottom (Pad 1) $ str $ show n
   | otherwise = padBottom (Pad 1) $ str $ show n
 
 styleToday :: Widget a -> Widget a
