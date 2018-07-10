@@ -12,12 +12,18 @@ data Calendar = Calendar
     , _day :: Day
     } deriving (Show)
 
-data Event = Event Int
+data Event = Event
+    { _time :: Int
+    , _name :: String
+    , _description :: String
+    } deriving (Show)
 
 data Day = Day 
-    { _focusedHour :: Int 
+    { _focusedHour :: Int
+    , _events :: [Event]
     } deriving (Show)
 
 makeLenses ''Calendar
 makeLenses ''Day
+makeLenses ''Event
 

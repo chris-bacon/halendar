@@ -35,7 +35,7 @@ main = do
         , _currentMonth = month
         , _currentDay = date
         , _focusedDay = date
-        , _day = Day 5
+        , _day = Day 5 [Event 1 "Test Name" "Test description"]
         }
     defaultMain app calendar
 
