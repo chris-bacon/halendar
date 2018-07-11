@@ -26,12 +26,6 @@ dateToWidget c d
   | length d == 1 = (padRightWithSpaces 3) . str $ d
   | length d == 2 && (read d :: Int) == c ^. focusedDay = (padRightWithSpaces 2) . styleToday . str $ d
   | otherwise = (padRightWithSpaces 2) . str $ d
-
-drawHour :: Calendar -> Int -> Widget a
-drawHour c n
-  | c ^. day ^. focusedHour == n = styleToday . padBottom (Pad 1) $ (str $ show n) <> str "  " <> str "selected"
-  | otherwise = (str $ show n) <+> str "  " <+> str "test"
-
 styleToday :: Widget a -> Widget a
 styleToday = withAttr (attrName "focusedDay")
 
@@ -42,16 +36,26 @@ splitAtAll :: Int -> [Int] -> [[Int]]
 splitAtAll _ [] = []
 splitAtAll c xs = [(fst $ splitAt c xs)] ++ splitAtAll c (drop c xs)
 
+drawHour :: Calendar -> Int -> Widget a
+drawHour c n
+  | c ^. day ^. focusedHour == n = styleToday . padBottom (Pad 1) $ (str $ show n) <> str "  selected"
+  | otherwise = (str $ show n) <+> str "  " <+> str "test"
+
+displayMonthYear :: Calendar -> Widget a
+displayMonthYear c = str (show $ c ^. currentMonth) <+> str "/" <+> str (show $ c ^. currentYear)
+
 datesUI :: Calendar -> [[Int]] -> Widget a 
 datesUI c dates = vBox $ widgetsToRows $ ((<$>) . (<$>)) ((dateToWidget c) . show) dates
 
 dayUI :: Calendar -> Widget a
-dayUI c = vBox $ fmap (drawHour c) [1..24]
+dayUI c = 
+    str (show $ c ^. focusedDay) <+> str "/" <+> displayMonthYear c
+    <=> (vBox $ fmap (drawHour c) [1..24])
 
 ui :: Calendar -> Widget a
 ui c@(Calendar DayView _ _ _ _ d) = dayUI c
-ui c = do  
-    str "June" 
+ui c =  
+    displayMonthYear c
     <=> datesUI c (splitAtAll 7 (getDaysInMonth c))
 
 drawUI :: Calendar -> [Widget a]
