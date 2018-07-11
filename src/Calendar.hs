@@ -4,7 +4,7 @@ module Calendar where
 import Control.Lens.TH
 
 data Calendar = Calendar 
-    { _dayView :: Bool
+    { _currentView :: View
     , _currentYear :: Integer
     , _currentMonth :: Int
     , _currentDay :: Int
@@ -22,6 +22,8 @@ data Day = Day
     { _focusedHour :: Int
     , _events :: [Event]
     } deriving (Show)
+
+data View = MonthView | DayView deriving (Show)
 
 makeLenses ''Calendar
 makeLenses ''Day

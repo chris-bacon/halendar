@@ -30,7 +30,7 @@ main :: IO Calendar
 main = do
     (year, month, date) <- getToday
     let calendar = Calendar {
-        _dayView = False
+        _currentView = MonthView
         , _currentYear = year
         , _currentMonth = month
         , _currentDay = date
