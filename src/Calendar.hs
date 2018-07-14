@@ -1,6 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Calendar where
 
+import Brick.Widgets.Edit
 import Control.Lens.TH
 
 data Calendar = Calendar 
@@ -10,6 +11,7 @@ data Calendar = Calendar
     , _currentDay :: Int
     , _focusedDay :: Int
     , _day :: Day
+    , _editor :: Editor String String
     } deriving (Show)
 
 data Event = Event

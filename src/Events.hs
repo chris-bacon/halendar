@@ -1,6 +1,7 @@
 module Events where
 
 import Brick
+import Brick.Types
 import Control.Lens
 import Graphics.Vty
 
@@ -10,10 +11,10 @@ import Calendar
 -- TODO: Handle ends and beginning of month
 handleEvent :: Calendar -> BrickEvent a b -> EventM c (Next Calendar)
 handleEvent c (VtyEvent (EvKey KEsc [])) = halt c
-handleEvent c@(Calendar DayView _ _ _ _ _) (VtyEvent (EvKey (KChar 'w') [])) = continue $ c & (day . focusedHour) -~ 1
-handleEvent c@(Calendar DayView _ _ _ _ _) (VtyEvent (EvKey (KChar 's') [])) = continue $ c & (day . focusedHour) +~ 1
-handleEvent c@(Calendar DayView _ _ _ _ _) (VtyEvent (EvKey (KChar 'q') [])) = continue $ c & currentView .~ MonthView
-handleEvent c@(Calendar DayView _ _ _ _ _) (VtyEvent (EvKey KEnter [])) = continue c -- EDITOR HERE
+handleEvent c@(Calendar DayView _ _ _ _ _ _) (VtyEvent (EvKey (KChar 'w') [])) = continue $ c & (day . focusedHour) -~ 1
+handleEvent c@(Calendar DayView _ _ _ _ _ _) (VtyEvent (EvKey (KChar 's') [])) = continue $ c & (day . focusedHour) +~ 1
+handleEvent c@(Calendar DayView _ _ _ _ _ _) (VtyEvent (EvKey (KChar 'q') [])) = continue $ c & currentView .~ MonthView
+handleEvent c@(Calendar DayView _ _ _ _ _ _) (VtyEvent (EvKey KEnter [])) = continue c -- TODO Editor here
 handleEvent c (VtyEvent (EvKey (KChar 'r') [])) = continue $ c & focusedDay .~ c ^. currentDay
 handleEvent c (VtyEvent (EvKey (KChar 'w') [])) = continue $ c & focusedDay -~ 7
 handleEvent c (VtyEvent (EvKey (KChar 'a') [])) = continue $ c & focusedDay -~ 1

@@ -1,6 +1,9 @@
 module UI where
 
 import Brick
+import Brick.Widgets.Center
+import qualified Brick.Widgets.Edit as Edit
+import qualified Brick.Focus as F
 import Control.Lens
 import qualified Data.Time as Time
 import qualified Data.Time.Calendar.MonthDay as MonthDay
@@ -16,48 +19,51 @@ instance Monoid (Widget a) where
 getDaysInMonth :: Calendar -> [Int]
 getDaysInMonth c = [1..(MonthDay.monthLength (Time.isLeapYear $ c ^. currentYear) (c ^. currentMonth))]
 
-padRightWithSpaces :: Int -> Widget a -> Widget a
+padRightWithSpaces :: Int -> Widget String -> Widget String
 padRightWithSpaces n = padRight (Pad n)
 
 -- TODO: Refactor this mess of code
-dateToWidget :: Calendar -> String -> Widget a
+dateToWidget :: Calendar -> String -> Widget String
 dateToWidget c d
   | length d == 1 && (read d :: Int) == c ^. focusedDay = (padRightWithSpaces 3) . styleToday . str $ d
   | length d == 1 = (padRightWithSpaces 3) . str $ d
   | length d == 2 && (read d :: Int) == c ^. focusedDay = (padRightWithSpaces 2) . styleToday . str $ d
   | otherwise = (padRightWithSpaces 2) . str $ d
-styleToday :: Widget a -> Widget a
+styleToday :: Widget String -> Widget String
 styleToday = withAttr (attrName "focusedDay")
 
-widgetsToRows :: [[Widget a]] -> [Widget a]
+widgetsToRows :: [[Widget String]] -> [Widget String]
 widgetsToRows w = foldr (<>) mempty <$> w
 
 splitAtAll :: Int -> [Int] -> [[Int]]
 splitAtAll _ [] = []
 splitAtAll c xs = [(fst $ splitAt c xs)] ++ splitAtAll c (drop c xs)
 
-drawHour :: Calendar -> Int -> Widget a
+drawHour :: Calendar -> Int -> Widget String
 drawHour c n
   | c ^. day ^. focusedHour == n = styleToday . padBottom (Pad 1) $ (str $ show n) <> str "  selected"
-  | otherwise = (str $ show n) <+> str "  " <+> str "test"
+  | otherwise = (str $ show n) <+> str "  test"
 
-displayMonthYear :: Calendar -> Widget a
+displayMonthYear :: Calendar -> Widget String
 displayMonthYear c = str (show $ c ^. currentMonth) <+> str "/" <+> str (show $ c ^. currentYear)
 
-datesUI :: Calendar -> [[Int]] -> Widget a 
+datesUI :: Calendar -> [[Int]] -> Widget String 
 datesUI c dates = vBox $ widgetsToRows $ ((<$>) . (<$>)) ((dateToWidget c) . show) dates
 
-dayUI :: Calendar -> Widget a
+dayUI :: Calendar -> Widget String
 dayUI c = 
     str (show $ c ^. focusedDay) <+> str "/" <+> displayMonthYear c
     <=> (vBox $ fmap (drawHour c) [1..24])
+    <=> (str . unlines) (Edit.getEditContents (c ^. editor))
+    <=> (Edit.renderEditor (str . unlines) True (c ^. editor))
+    <=> center (hLimit 30 (F.withFocusRing (F.focusRing ["Editor"]) (Edit.renderEditor (str . unlines)) (c ^. editor)))
 
-ui :: Calendar -> Widget a
-ui c@(Calendar DayView _ _ _ _ d) = dayUI c
+ui :: Calendar -> Widget String
+ui c@(Calendar DayView _ _ _ _ d _) = dayUI c
 ui c =  
     displayMonthYear c
     <=> datesUI c (splitAtAll 7 (getDaysInMonth c))
 
-drawUI :: Calendar -> [Widget a]
+drawUI :: Calendar -> [Widget String]
 drawUI c = return $ ui c
 
