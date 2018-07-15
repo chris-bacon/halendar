@@ -25,7 +25,7 @@ data Day = Day
     , _events :: [Event]
     } deriving (Show)
 
-data View = MonthView | DayView deriving (Show)
+data View = MonthView | DayView | EditView deriving (Show)
 
 makeLenses ''Calendar
 makeLenses ''Day

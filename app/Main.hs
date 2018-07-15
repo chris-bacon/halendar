@@ -17,7 +17,7 @@ attributeMap :: AttrMap
 attributeMap = attrMap defAttr 
     [("focusedDay", (black `on` white))
     , (Edit.editAttr, white `on` blue)
-    , (Edit.editFocusedAttr, blue `on` white)
+    , (Edit.editFocusedAttr, white `on` black)
     ]
 
 type A = ()
@@ -40,7 +40,7 @@ main = do
         , _currentDay = date
         , _focusedDay = date
         , _day = Day 5 [Event 1 "Test Name" "Test description"]
-        , _editor = Edit.editor "Editor" Nothing "Hello"
+        , _editor = Edit.editor "Editor" Nothing "This is an editor"
         }
     defaultMain app calendar
 

@@ -55,11 +55,14 @@ dayUI c =
     str (show $ c ^. focusedDay) <+> str "/" <+> displayMonthYear c
     <=> (vBox $ fmap (drawHour c) [1..24])
     <=> (str . unlines) (Edit.getEditContents (c ^. editor))
-    <=> (Edit.renderEditor (str . unlines) True (c ^. editor))
-    <=> center (hLimit 30 (F.withFocusRing (F.focusRing ["Editor"]) (Edit.renderEditor (str . unlines)) (c ^. editor)))
+
+editUI :: Calendar -> Widget String
+editUI c = hLimit 30 (F.withFocusRing (F.focusRing ["Editor"]) (Edit.renderEditor (str . unlines)) (c ^. editor))
+
 
 ui :: Calendar -> Widget String
-ui c@(Calendar DayView _ _ _ _ d _) = dayUI c
+ui c@(Calendar DayView _ _ _ _ _ _) = dayUI c
+ui c@(Calendar EditView _ _ _ _ _ _) = editUI c
 ui c =  
     displayMonthYear c
     <=> datesUI c (splitAtAll 7 (getDaysInMonth c))
