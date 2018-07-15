@@ -39,26 +39,26 @@ splitAtAll :: Int -> [Int] -> [[Int]]
 splitAtAll _ [] = []
 splitAtAll c xs = [(fst $ splitAt c xs)] ++ splitAtAll c (drop c xs)
 
-drawHour :: Calendar -> Int -> Widget String
-drawHour c n
-  | c ^. day ^. focusedHour == n = styleToday . padBottom (Pad 1) $ (str $ show n) <> str "  selected"
-  | otherwise = (str $ show n) <+> str "  test"
-
 displayMonthYear :: Calendar -> Widget String
 displayMonthYear c = str (show $ c ^. currentMonth) <+> str "/" <+> str (show $ c ^. currentYear)
 
 datesUI :: Calendar -> [[Int]] -> Widget String 
 datesUI c dates = vBox $ widgetsToRows $ ((<$>) . (<$>)) ((dateToWidget c) . show) dates
 
+drawHour :: Calendar -> Int -> Widget String
+drawHour c n
+  | c ^. day ^. focusedHour == n = styleToday . padBottom (Pad 1) $ (str $ show n) <> str "  " <> editorContents
+  | otherwise = (str $ show n) <+> str "  " <+> editorContents
+    where
+        editorContents = (str . unlines) (Edit.getEditContents (c ^. editor))
+
 dayUI :: Calendar -> Widget String
 dayUI c = 
     str (show $ c ^. focusedDay) <+> str "/" <+> displayMonthYear c
     <=> (vBox $ fmap (drawHour c) [1..24])
-    <=> (str . unlines) (Edit.getEditContents (c ^. editor))
 
 editUI :: Calendar -> Widget String
 editUI c = hLimit 30 (F.withFocusRing (F.focusRing ["Editor"]) (Edit.renderEditor (str . unlines)) (c ^. editor))
-
 
 ui :: Calendar -> Widget String
 ui c@(Calendar DayView _ _ _ _ _ _) = dayUI c

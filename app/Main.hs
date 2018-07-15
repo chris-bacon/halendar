@@ -40,7 +40,7 @@ main = do
         , _currentDay = date
         , _focusedDay = date
         , _day = Day 5 [Event 1 "Test Name" "Test description"]
-        , _editor = Edit.editor "Editor" Nothing "This is an editor"
+        , _editor = Edit.editor "Editor" Nothing "This is content from the editor"
         }
     defaultMain app calendar
 
