@@ -29,6 +29,7 @@ dateToWidget c d
   | length d == 1 = (padRightWithSpaces 3) . str $ d
   | length d == 2 && (read d :: Int) == c ^. focusedDay = (padRightWithSpaces 2) . styleToday . str $ d
   | otherwise = (padRightWithSpaces 2) . str $ d
+
 styleToday :: Widget String -> Widget String
 styleToday = withAttr (attrName "focusedDay")
 
