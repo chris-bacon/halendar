@@ -30,6 +30,9 @@ app = App { appDraw = drawUI
           , appAttrMap = const attributeMap
           }
 
+createEditor :: Edit.Editor String String
+createEditor = Edit.editor "Editor" Nothing ""
+
 main :: IO Calendar
 main = do
     (year, month, date) <- getToday
@@ -39,8 +42,7 @@ main = do
         , _currentMonth = month
         , _currentDay = date
         , _focusedDay = date
-        , _day = Day 5 [Event 1 "Test Name" "Test description"]
-        , _editor = Edit.editor "Editor" Nothing "This is content from the editor"
+        , _day = Day 12 (fmap (HourInfo "" "" createEditor) [1..24])
         }
     defaultMain app calendar
 

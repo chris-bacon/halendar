@@ -11,23 +11,23 @@ data Calendar = Calendar
     , _currentDay :: Int
     , _focusedDay :: Int
     , _day :: Day
-    , _editor :: Editor String String
-    } deriving (Show)
-
-data Event = Event
-    { _time :: Int
-    , _name :: String
-    , _description :: String
     } deriving (Show)
 
 data Day = Day 
-    { _focusedHour :: Int
-    , _events :: [Event]
+    { _currentHour :: Int
+    , _hourInfo :: [HourInfo]
+    } deriving (Show)
+
+data HourInfo = HourInfo
+    { _name :: String
+    , _description :: String
+    , _editor :: Editor String String
+    , _time :: Int
     } deriving (Show)
 
 data View = MonthView | DayView | EditView deriving (Show)
 
 makeLenses ''Calendar
 makeLenses ''Day
-makeLenses ''Event
+makeLenses ''HourInfo
 

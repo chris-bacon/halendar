@@ -46,25 +46,28 @@ displayMonthYear c = str (show $ c ^. currentMonth) <+> str "/" <+> str (show $ 
 datesUI :: Calendar -> [[Int]] -> Widget String 
 datesUI c dates = vBox $ widgetsToRows $ ((<$>) . (<$>)) ((dateToWidget c) . show) dates
 
-drawHour :: Calendar -> Int -> Widget String
-drawHour c n
-  | c ^. day ^. focusedHour == n = styleToday . padBottom (Pad 1) $ (str $ show n) <> str "  " <> editorContents
-  | otherwise = (str $ show n) <+> str "  " <+> editorContents
+drawHour :: Int -> HourInfo -> Widget String
+drawHour n e
+  | e ^. time == n = styleToday . padBottom (Pad 1) $ (str $ show n) <> str "  " <> editorContents
+  | otherwise = (str $ show (e ^. time)) <+> str "  " <+> editorContents
     where
-        editorContents = (str . unlines) (Edit.getEditContents (c ^. editor))
+        editorContents = (str . unlines) (Edit.getEditContents $ e ^. editor)
 
 dayUI :: Calendar -> Widget String
-dayUI c = 
+dayUI c =
     str (show $ c ^. focusedDay) <+> str "/" <+> displayMonthYear c
-    <=> (vBox $ fmap (drawHour c) [1..24])
+    <=> (vBox $ drawHour (c ^. day ^. currentHour) <$> c ^. day ^. hourInfo)
 
-editUI :: Calendar -> Widget String
-editUI c = hLimit 30 (F.withFocusRing (F.focusRing ["Editor"]) (Edit.renderEditor (str . unlines)) (c ^. editor))
+editUI :: HourInfo -> Widget String
+editUI e = hLimit 30 (F.withFocusRing (F.focusRing ["Editor"]) (Edit.renderEditor (str . unlines)) (e ^. editor))
+
+getCurrentHourInfo :: Int -> [HourInfo] -> HourInfo
+getCurrentHourInfo n (h:hs) = if n == (h ^. time) then h else getCurrentHourInfo n hs
 
 ui :: Calendar -> Widget String
-ui c@(Calendar DayView _ _ _ _ _ _) = dayUI c
-ui c@(Calendar EditView _ _ _ _ _ _) = editUI c
-ui c =  
+ui c@(Calendar DayView _ _ _ _ _) = dayUI c
+ui (Calendar EditView _ _ _ _ day) = editUI (getCurrentHourInfo (day ^. currentHour) (day ^. hourInfo))
+ui c =
     displayMonthYear c
     <=> datesUI c (splitAtAll 7 (getDaysInMonth c))
 
