@@ -33,7 +33,7 @@ styleToday :: Widget String -> Widget String
 styleToday = withAttr (attrName "focusedDay")
 
 widgetsToRows :: [[Widget String]] -> [Widget String]
-widgetsToRows w = foldr (<>) mempty <$> w
+widgetsToRows w = mconcat <$> w
 
 splitAtAll :: Int -> [Int] -> [[Int]]
 splitAtAll _ [] = []
