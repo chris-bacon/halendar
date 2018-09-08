@@ -9,10 +9,11 @@ An interactive command line calendar.
 ## Commands
 
 ```
-ESC  - quit
-q    - quit
-wasd - move around on the calendar
-r    - reset focused day back to current day
+ESC   - quit
+q     - quit
+wasd  - move around on the calendar
+ENTER - move forward
+r     - reset focused day back to current day
 ```
 
 ## TODO
