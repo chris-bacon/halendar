@@ -4,7 +4,7 @@
 
 An interactive command line calendar.
 
-![calendar-screenshot](https://github.com/chris-bacon/halendar/calendar.png)
+![calendar-screenshot](https://github.com/chris-bacon/halendar/calendar.png "Calendar")
 
 ## Commands
 
